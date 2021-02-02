@@ -1,0 +1,333 @@
+package Automation;
+
+import java.io.FileReader;
+import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class ten {
+	
+	 public static void main(String[] args) {
+		 
+		 JSONParser parser = new JSONParser();
+		 
+		 try {
+			 	
+			    // Accessing data from JSON file			 	
+			 	JSONArray movie = (JSONArray) parser.parse(new FileReader("C:\\Users\\Dell\\eclipse-workspace\\Testing\\json follder\\collection.json"));
+			 	
+			 	ArrayList<String> cast_list = new ArrayList<String>();
+			 	ArrayList<String> name_list = new ArrayList<String>();
+			 	ArrayList<String> year_list = new ArrayList<String>();
+			 	
+			 	// Adding data from file to list
+			 	for (Object movie_details : movie){
+			 		
+			 	    JSONObject data= (JSONObject) movie_details;
+
+			 	    String name = (String) data.get("Name");
+			 	    name_list.add(name);
+
+			 	    String year = (String) data.get("Year");
+			 	    year_list.add(year);
+
+			 	    JSONArray cast = (JSONArray) data.get("Cast");
+			 	    cast_list.add("main_cast" +cast);
+	
+			 	}
+			    
+			 	System.out.println("Name:" +name_list);
+				System.out.println("Year:" +year_list);
+				System.out.println("Cast:" +cast_list);
+	        } 
+		 
+		 catch(Exception e) {
+	            e.printStackTrace();
+	     }
+		 
+	}
+	 
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+package Automation;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Scanner;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class eleven {
+	
+	public static void main(String[] args) {
+		
+		// Accessing Chrome	
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Dell\\Desktop\\Nchrome\\chromedriver.exe");
+		
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://www.imdb.com/list/ls016522954/?ref_=nv_tvv_dvd");
+		
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		// Creating a linked hashmap and list
+		LinkedHashMap<String, String> sortedMap = new LinkedHashMap<>();		
+	    ArrayList<String> list = new ArrayList<>();
+	    
+		// Creating a Hashmap with movie names and its rating	    
+	    String channel1 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[1]/div[2]/h3/a")).getText();
+	    String rate1 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[1]/div[2]/div[1]/div[1]/span[2]")).getText();
+		
+	    String channel2 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[2]/div[2]/h3/a")).getText();
+	    String rate2 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[2]/div[2]/div[1]/div[1]/span[2]")).getText();
+	    
+	    String channel3 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[3]/div[2]/h3/a")).getText();
+	    String rate3 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[3]/div[2]/div[1]/div[1]/span[2]")).getText();
+	    
+	    String channel4 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[4]/div[2]/h3/a")).getText();
+	    String rate4 = driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div[3]/div[4]/div[2]/div[1]/div[1]/span[2]")).getText();
+	    
+		HashMap<String, String> movies=new HashMap<String, String>();
+		movies.put(channel1,rate1);
+		movies.put(channel2,rate2);
+		movies.put(channel3,rate3);
+		movies.put(channel4,rate4);
+		System.out.println(movies);
+
+		// Adding values to a list
+	    for (Entry<String, String> entry : movies.entrySet()) {
+	         list.add(entry.getValue());
+	    }
+	    
+	    // Sorting by value
+	    Scanner name = new Scanner(System.in);
+		System.out.println("Sort in ascending or descending(asc or desc)?");
+		String sorts= name.nextLine();
+		
+		if(sorts.equals("asc")) {
+			Collections.sort(list);
+		}
+		
+		else {
+			Collections.sort(list, Collections.reverseOrder());
+		}
+     
+	    for (String str : list) {	    	  
+	       for (Entry<String, String> entry : movies.entrySet()) {	        	 
+	          if (entry.getValue().equals(str)) {
+	              sortedMap.put(entry.getKey(), str);
+	          }
+	       }
+	    }
+		    
+	    // Sorted Hashmap by value
+	    for (Entry movie: sortedMap.entrySet()) {
+		     System.out.println(movie.getKey() + ":" + movie.getValue());
+		}
+		  
+	}
+	
+}
+
+
+
+
+package Automation;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.Scanner;
+
+class nine {
+	
+	public static void main(String[] args) throws InterruptedException {
+
+		// Creating a Hashmap with channel names    
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Dell\\Desktop\\Nchrome\\chromedriver.exe");
+		
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://www.mxplayer.in/?q=Channels&search=true&type=publisher&sectionId=publisher");
+		
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		// Adding channel names to hashmap from a list
+		String channel = driver.findElement(By.xpath("//*[@id=\"header\"]/div/div/div[1]/div[2]/div[2]/div/div/div")).getText();
+		
+		
+		String[] name=new String[5];
+		name = channel.split("\n");
+		
+		HashMap<Integer,String> order=new HashMap<Integer,String>();
+		
+		for (int i=0;i<name.length;i++){
+			order.put(i+1, name[i]);
+		}
+		
+		System.out.println(order);
+		
+		// Removing item from hashmap
+		Scanner name1 = new Scanner(System.in);
+		System.out.println("Channel number to be removed?");
+		Integer movie_name= name1.nextInt();
+			
+		order.remove(movie_name);		
+		System.out.println(order);		
+		
+	}
+	
+}
+
+
+
+
+
+
+package Automation;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class six {
+	public static void main(String[] args) throws InterruptedException {
+		
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Dell\\Desktop\\Nchrome\\chromedriver.exe");
+		
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://www.mxplayer.in/");
+		
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		driver.findElement(By.xpath("//*[@id=\"header\"]/div/div/div/div[4]/div[2]/div[1]/div/div[2]/div/div[3]")).click();
+		driver.findElement(By.xpath("//*[@id=\"header\"]/div/div/div/div[3]/div/div[2]/div/div[3]")).click();
+		Thread.sleep(5000);
+			
+		driver.findElement(By.xpath("//*[@id=\"header\"]/div/div/div/div[3]/a/div/div")).click();
+		Thread.sleep(5000);
+		
+		driver.findElement(By.xpath("//*[@id=\"footer\"]/div/div[2]/div[1]/div/div[2]/div[2]/div[9]/a/span")).click();
+		Thread.sleep(5000);
+		
+		// Adding movies to watchlist
+		driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div/div/div/div/a[1]/div/div/div[1]/button")).click();
+		driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div/div/div/div/a[2]/div/div/div[1]/button")).click();	
+		driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div/div/div/div/a[3]/div/div/div[1]/button")).click();	
+		driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[4]/div/div/div/div/a[4]/div/div/div[1]/button")).click();
+		Thread.sleep(5000);
+
+		System.out.println("Movies added to watchlist");
+		
+		// Adding movies in watchlist to a list
+		driver.findElement(By.xpath("//*[@id=\"header\"]/div/div/div/div[3]/a/div/div")).click();
+		Thread.sleep(5000);
+		
+		String movie1 =driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[2]/div/div/div/div/a[1]/div/div/div[3]/div[1]")).getText();
+		String movie2 =driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[2]/div/div/div/div/a[2]/div/div/div[3]/div[1]")).getText();
+		String movie3 =driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[2]/div/div/div/div/a[3]/div/div/div[3]/div[1]")).getText();
+		String movie4 =driver.findElement(By.xpath("//*[@id=\"main\"]/div/div[2]/div/div/div/div/a[4]/div/div/div[3]/div[1]")).getText();
+		
+		ArrayList<String> movie_list = new ArrayList<String>();
+		
+		movie_list.add(movie1);
+		movie_list.add(movie2);
+		movie_list.add(movie3);
+		movie_list.add(movie4);
+		
+		// Removing user required movie
+		System.out.println("List before removing movie... ");
+		System.out.println(movie_list);
+		
+		Scanner name = new Scanner(System.in);
+		System.out.println("Movie to be removed from list?");
+		String remove_movie= name.nextLine();
+		movie_list.remove(remove_movie);
+		
+		System.out.println("List after removing movie... ");
+		System.out.println(movie_list);
+	}
+	
+}
+
+
+
+
+package Automation;
+
+import java.io.FileReader;
+import java.util.concurrent.TimeUnit;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Three {
+	
+	public static void main(String[] args) throws Exception {
+	
+			System.setProperty("webdriver.chrome.driver", "C:\\Users\\Dell\\Desktop\\Nchrome\\chromedriver.exe");
+			
+			WebDriver driver=new ChromeDriver();
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					
+			// Accessing JSON file to read Credentials and its xpath
+			JSONParser jsonparse = new JSONParser();
+			FileReader reader = new FileReader("C:\\Users\\Dell\\eclipse-workspace\\Testing\\json follder\\credentials.json");
+			
+			Object obj = jsonparse.parse(reader);
+			JSONObject emp=(JSONObject)obj;
+			
+			String url = (String) emp.get("url");
+			
+			String mailxpath = (String) emp.get("mxpath");
+			String passxpath = (String) emp.get("pxpath");
+			String logxpath = (String) emp.get("lxpath");
+			
+			String email = (String) emp.get("mail");
+			String epass = (String) emp.get("pass");         
+	         			
+			driver.get(url);
+			driver.manage().window().maximize();
+		    
+			// Login using data from JSON file
+			driver.findElement(By.name(mailxpath)).sendKeys(email);
+			driver.findElement(By.name(passxpath)).sendKeys(epass);
+			driver.findElement(By.xpath(logxpath)).click();
+			Thread.sleep(5000);
+			
+	}
+}
+	
